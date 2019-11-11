@@ -1,14 +1,14 @@
 // @TODO: YOUR CODE HERE!
 // Define SVG area dimensions
-var svgWidth = 960;
+var svgWidth = 1200;
 var svgHeight = 660;
 
 // Define the chart's margins as an object
 var chartMargin = {
-    top: 30,
-    right: 30,
-    bottom: 30,
-    left: 30
+    top: 40,
+    right: 20,
+    bottom:50,
+    left: 100
 };
  
 // Define dimensions of the chart area
@@ -16,8 +16,7 @@ var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
 var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
 // Select body, append SVG area to it, and set the dimensions
-var svg = d3
-  .select("body")
+var svg = d3.select("body")
   .append("svg")
   .attr("height", svgHeight)
   .attr("width", svgWidth);
@@ -26,20 +25,21 @@ var svg = d3
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
+  d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+
 // Load data from data.csv
 // Import Data
-d3.csv("data.csv", function(err, healthData) {
-  if (err) throw err;
+d3.csv("data.csv", function(healthData) {
 
-// console.log(healthData);
+console.log(healthData);
 // cast the force value to a number
-healthData.forEach(function(data){
+healthData.forEach(function(data) {
   data.poverty = +data.poverty;
   data.healthcare = +data.healthcare;
 });
 //Create scale functions
-var xLinearScale = d3.scaleLinear().range([0, width]);
-var yLinearScale = d3.scaleLinear().range([height, 0]);
+var xLinearScale = d3.scaleLinear().range([0, chartWidth]);
+var yLinearScale = d3.scaleLinear().range([chartHeight, 0]);
 
 //Create axis functions
 
@@ -71,7 +71,7 @@ console.log(yMax);
 //Append Axes to the chart
 
 chartGroup.append("g")
-  .attr("transform", `translate(0, ${height})`)
+  .attr("transform", `translate(0, ${chartHeight})`)
     .call(bottomAxis);
 
 chartGroup.append("g")
@@ -135,14 +135,14 @@ chartGroup.append("g")
 
   chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left + 40)
-    .attr("x", 0 - (height / 2))
+    .attr("y", 0 - (chartMargin.left + 40))
+    .attr("x", 0 - (chartHeight / 2))
     .attr("dy", "1em")
     .attr("class", "axisText")
     .text("Lacks Healtcare(%)");
 
   chartGroup.append("g")
-    .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+    .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + chartMargin.top + 30})`)
     .attr("class", "axisText")
     .text("In Poverty (%)");
  
